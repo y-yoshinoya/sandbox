@@ -13,11 +13,11 @@ package example {
         case TypeRef(_, CompanionOpsClass, arg :: Nil) => arg
         case tp                                        => c.abort(c.enclosingPosition, s"Unexpected prefix: $tp/${tp.getClass}")
       }
-      val companion = clazzType.typeSymbol.companionSymbol match {
+      val companion = clazzType.typeSymbol.companion match {
         case NoSymbol => c.abort(c.enclosingPosition, s"Instance of $clazzType has no companion object")
         case sym      => sym
       }
-      def make[U: c.WeakTypeTag] = c.Expr[U](treeBuild.mkAttributedRef(companion))
+      def make[U: c.WeakTypeTag] = c.Expr[U](internal.gen.mkAttributedRef(companion))
 
       make(c.WeakTypeTag(companion.typeSignature))
     }
